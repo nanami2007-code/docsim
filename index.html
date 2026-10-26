@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f8fa">
+  <title>DocSim | Document Search & Similarity Analysis</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#" aria-label="DocSim home">
+      <span class="brand-icon">D.</span>
+      <span><b>DocSim</b><small>Document intelligence</small></span>
+    </a>
+
+    <p class="nav-heading">WORKSPACE</p>
+    <nav>
+      <button class="nav-item active" data-target="overview">⌂ <span>Overview</span></button>
+      <button class="nav-item" data-target="search">⌕ <span>Search documents</span></button>
+      <button class="nav-item" data-target="duplicates">▢ <span>Duplicate detection</span></button>
+      <button class="nav-item" data-target="clusters">◎ <span>Clusters & insights</span></button>
+    </nav>
+
+    <div class="sidebar-note">
+      <span class="note-icon">i</span>
+      <div><b>Made for research</b>
+        <p>Find relevant passages and verify them in context.</p>
+      </div>
+    </div>
+    <small class="version">DOCSIM · FRONTEND PROTOTYPE</small>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="crumb">Workspace <span>/</span> <b id="breadcrumb">Overview</b></div>
+      <div class="session"><span class="online-dot"></span> Local session <span class="avatar">D</span></div>
+    </header>
+
+    <section class="page" id="overview">
+      <div class="welcome">
+        <div>
+          <p class="eyebrow">DOCUMENT WORKSPACE</p>
+          <h1>Your documents, understood.</h1>
+          <p class="muted">Search, compare and explore a collection without losing the context.</p>
+        </div>
+        <button class="btn primary" id="add-top">＋ Add documents</button>
+      </div>
+
+      <section class="metrics">
+        <article class="metric">
+          <span>Documents indexed</span>
+          <strong id="doc-count">0</strong>
+          <small>Files in this session</small>
+        </article>
+        <article class="metric">
+          <span>Searches run</span>
+          <strong id="search-count">0</strong>
+          <small>Queries in this session</small>
+        </article>
+        <article class="metric">
+          <span>Duplicate pairs</span>
+          <strong id="dupe-count">—</strong>
+          <small>Exact text matches</small>
+        </article>
+        <article class="metric">
+          <span>Topic groups</span>
+          <strong id="group-count">—</strong>
+          <small>Keyword-based preview</small>
+        </article>
+      </section>
+
+      <div class="columns">
+        <div class="left-column">
+          <section class="panel" id="upload">
+            <div class="panel-heading">
+              <div><p class="eyebrow">START HERE</p>
+                <h2>Add your documents</h2>
+                <p class="muted">Bring notes, assignments and text files into one searchable space.</p>
+              </div>
+              <span class="heading-icon">↥</span>
+            </div>
+
+            <div class="drop-zone" id="drop-zone" tabindex="0">
+              <span class="upload-icon">↥</span>
+              <b>Drop files here, or <span class="blue-text">browse files</span></b>
+              <p>Supports .txt and .md · Processed in your browser</p>
+              <button class="btn secondary" id="browse">Choose files</button>
+              <input type="file" id="file-input" accept=".txt,.md,.text" multiple hidden>
+            </div>
+
+            <div class="list-heading">
+              <b>Workspace files</b><span id="file-count">0 files</span>
+            </div>
+            <div id="file-list" class="file-list"></div>
+            <div class="privacy-note"><span>●</span> Files are processed locally in this browser session.</div>
+          </section>
+
+          <section class="panel" id="search">
+            <div class="panel-heading">
+              <div><p class="eyebrow">FIND SOMETHING</p>
+                <h2>Search your collection</h2>
+                <p class="muted">Locate relevant documents and matching passages.</p>
+              </div>
+              <span class="heading-icon">⌕</span>
+            </div>
+
+            <div class="tabs">
+              <button class="tab active" data-mode="keyword">Keyword search</button>
+              <button class="tab" data-mode="exact">Exact phrase</button>
+              <button class="tab" data-mode="text">Text comparison</button>
+            </div>
+
+            <form id="search-form">
+              <label for="query">Search terms</label>
+              <div class="search-box">
+                <span>⌕</span>
+                <input id="query" type="text" placeholder="e.g. pattern search, indexing, algorithms">
+                <button class="btn primary" type="submit">Search →</button>
+              </div>
+              <p class="hint" id="search-hint">Find documents containing one or more keywords.</p>
+            </form>
+            <div id="results" class="results">
+              <div class="empty-state">
+                <span>⌕</span><b>Your results will appear here</b>
+                <p>Upload documents and run a search to see matching passages and relevance scores.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="right-column">
+          <section class="panel" id="duplicates">
+            <div class="panel-heading compact">
+              <div><p class="eyebrow">QUALITY CHECK</p><h2>Duplicate detection</h2></div>
+              <span class="heading-icon">▢</span>
+            </div>
+            <p class="muted description">Find files containing identical text.</p>
+            <div class="dupe-summary">
+              <div><strong id="duplicate-number">0</strong><span>matching pairs</span></div>
+              <span id="dupe-status" class="status-pill">Not checked</span>
+            </div>
+            <button class="btn secondary wide" id="check-duplicates">Check for duplicates →</button>
+            <div id="duplicate-results" class="mini-results">
+              <p class="hint">Your duplicate report will appear here.</p>
+            </div>
+          </section>
+
+          <section class="panel" id="clusters">
+            <div class="panel-heading compact">
+              <div><p class="eyebrow">COLLECTION OVERVIEW</p><h2>Cluster statistics</h2></div>
+              <span class="heading-icon">◎</span>
+            </div>
+            <p class="muted description">A simple keyword-based grouping preview.</p>
+            <div id="cluster-stats">
+              <div class="empty-chart">◎<p>Add documents to preview groups.</p></div>
+            </div>
+            <div class="legend">
+              <span><i class="dot c1"></i>Algorithms</span>
+              <span><i class="dot c2"></i>Similarity</span>
+              <span><i class="dot c3"></i>Indexing</span>
+            </div>
+            <p class="fine-print">Illustrative keyword groups, not a trained clustering model.</p>
+          </section>
+
+          <section class="panel">
+            <div class="panel-heading compact">
+              <div><p class="eyebrow">SESSION LOG</p><h2>Recent activity</h2></div>
+              <span class="heading-icon">↻</span>
+            </div>
+            <div id="activity-list" class="activity-list">
+              <p class="hint">Your recent actions will appear here.</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>DocSim · Document Search & Similarity Analysis</span>
+      <span>Frontend prototype · v1.0</span>
+    </footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
